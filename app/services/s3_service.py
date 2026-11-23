@@ -1,16 +1,11 @@
-import boto3
 import os
-import uuid
-import tempfile
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 
-from pydantic import BaseModel
-from urllib3 import ProxyManager
+import boto3
 from botocore.client import Config
 
-from app.exceptions.s3 import S3ObjectDoesntExistException
 from app.config.settings import settings
+from app.exceptions.s3 import S3ObjectDoesntExistException
 
 
 class S3Service:
@@ -30,7 +25,7 @@ class S3Service:
             config=Config(
                 signature_version="s3v4",
             ),
-            region_name="us-east-1"
+            region_name="us-east-1",
         )
         self.tmp_path: str = "./tmp"
         self.bucket_name = settings.bucket_name
@@ -96,9 +91,7 @@ class S3Service:
         - S3Error: If there is an issue with the S3-compatible storage service.
         """
         self.__validate_object_existance(s3_object_path)
-        self.s3_client.delete_object(
-            self.bucket_name, s3_object_path
-        )
+        self.s3_client.delete_object(self.bucket_name, s3_object_path)
 
     def upload(self, file_name: str, content) -> str:
         """
@@ -132,14 +125,14 @@ class S3Service:
         local_file_path: str = os.path.join(self.tmp_path, file_name_to_create)
         try:
             self.s3_client.download_file(
-                    self.bucket_name,
-                    s3_object_path,
-                    file_name_to_create,
-                )
+                self.bucket_name,
+                s3_object_path,
+                file_name_to_create,
+            )
             return file_name_to_create
         except Exception as e:
             raise RuntimeError(
-                f"Failed to download file '{s3_object_path}': {str(e)}"
+                f"Failed to download file '{s3_object_path}': {e!s}"
             ) from e
 
     def generate_download_url(
@@ -166,13 +159,13 @@ class S3Service:
         )
         try:
             presigned_url: str = self.s3_client.generate_presigned_url(
-                ClientMethod='get_object',
-                Params={'Bucket': self.bucket_name, 'Key': s3_object_path},
+                ClientMethod="get_object",
+                Params={"Bucket": self.bucket_name, "Key": s3_object_path},
                 ExpiresIn=60,
             )
             return presigned_url
         except Exception as e:
-            raise RuntimeError(f"Failed to generate download link: {str(e)}") from e
+            raise RuntimeError(f"Failed to generate download link: {e!s}") from e
 
     def generate_presigned_upload_url(
         self, s3_object_path: str | None = None, expiration_minutes: int = 360
@@ -197,4 +190,4 @@ class S3Service:
             )
             return presigned_url, s3_object_path
         except Exception as e:
-            raise RuntimeError(f"Failed to generate pre-signed URL: {str(e)}") from e
+            raise RuntimeError(f"Failed to generate pre-signed URL: {e!s}") from e

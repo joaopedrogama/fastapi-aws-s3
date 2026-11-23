@@ -2,8 +2,8 @@ from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-class Settings(BaseSettings):
 
+class Settings(BaseSettings):
     s3_external_port: str
     s3_access_key: str
     s3_secret_key: str
@@ -12,8 +12,10 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file="/app/.env")
 
-@lru_cache()
+
+@lru_cache
 def get_settings():
     return Settings()
+
 
 settings = get_settings()
