@@ -1,9 +1,11 @@
+import os
 import boto3
-from fastapi import APIRouter, UploadFile, File, HTTPException, Query
-from fastapi.responses import FileResponse
+from fastapi import APIRouter, UploadFile, File, HTTPException, Query, Depends
+from fastapi.responses import RedirectResponse, FileResponse
 from app.config.settings import settings
 from botocore.client import Config
 from app.services.s3_service import S3Service
+from starlette.background import BackgroundTasks
 
 router = APIRouter()
 
@@ -37,11 +39,16 @@ def list_files():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/download")
-def download_file(filename: str= Query(..., examples=["2024/12/27/123.txt"])):
+
+@router.get("/download", response_class=FileResponse)
+def download_file(background_tasks: BackgroundTasks, filename: str=Query(..., examples=["2024/12/27/123.txt"])):
+    def remove_file(path: str) -> None:
+        os.unlink(path)
+
     try:
         service = S3Service()
-        obj = service.generate_download_url(filename)
+        obj = service.download(filename)
+        background_tasks.add_task(remove_file, obj)
         return obj
     except s3.exceptions.NoSuchKey:
         raise HTTPException(status_code=404, detail="File not found")

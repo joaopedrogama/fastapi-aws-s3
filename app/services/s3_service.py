@@ -1,6 +1,7 @@
 import boto3
 import os
 import uuid
+import tempfile
 from datetime import datetime
 from datetime import timedelta
 
@@ -130,12 +131,12 @@ class S3Service:
         )
         local_file_path: str = os.path.join(self.tmp_path, file_name_to_create)
         try:
-            self.s3_client.get_object(
-                self.bucket_name,
-                s3_object_path,
-                local_file_path,
-            )
-            return local_file_path
+            self.s3_client.download_file(
+                    self.bucket_name,
+                    s3_object_path,
+                    file_name_to_create,
+                )
+            return file_name_to_create
         except Exception as e:
             raise RuntimeError(
                 f"Failed to download file '{s3_object_path}': {str(e)}"
