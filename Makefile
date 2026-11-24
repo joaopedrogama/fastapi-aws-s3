@@ -10,7 +10,7 @@ format:
 	${base_command} uv run ruff format
 
 up:
-	docker compose up
+	docker compose up --watch
 
 down:
 	docker compose down

@@ -122,7 +122,6 @@ class S3Service:
         file_name_to_create: str = (
             local_file_name if local_file_name else os.path.basename(s3_object_path)
         )
-        local_file_path: str = os.path.join(self.tmp_path, file_name_to_create)
         try:
             self.s3_client.download_file(
                 self.bucket_name,
@@ -154,9 +153,6 @@ class S3Service:
         - (str): A pre-signed URL to download the object.
         """
         self.__validate_object_existance(s3_object_path=s3_object_path)
-        file_name: str = (
-            desired_filename if desired_filename else os.path.basename(s3_object_path)
-        )
         try:
             presigned_url: str = self.s3_client.generate_presigned_url(
                 ClientMethod="get_object",

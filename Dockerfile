@@ -27,4 +27,4 @@ COPY ./app /app/app
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev
 
-CMD ["uv", "run",  "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uv", "run",  "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

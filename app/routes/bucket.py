@@ -24,7 +24,10 @@ BUCKET_NAME = settings.bucket_name
 
 
 @router.post("/upload/")
-async def upload_file(file: UploadFile = File(...)):
+async def upload_file(file: UploadFile):
+    if file is None:
+        file = File(...)
+
     try:
         service = S3Service()
         content = await file.read()
