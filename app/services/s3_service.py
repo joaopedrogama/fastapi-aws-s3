@@ -91,7 +91,7 @@ class S3Service:
         - S3Error: If there is an issue with the S3-compatible storage service.
         """
         self.__validate_object_existance(s3_object_path)
-        self.s3_client.delete_object(self.bucket_name, s3_object_path)
+        self.s3_client.delete_object(Bucket=self.bucket_name, Key=s3_object_path)
 
     def upload(self, file_name: str, content) -> str:
         """
