@@ -23,16 +23,6 @@ async def upload_file(file: UploadFile):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# @router.get("/list/")
-# def list_files():
-#     try:
-#         response = s3.list_objects_v2(Bucket=BUCKET_NAME)
-#         files = [obj for obj in response.get("Contents", [])]
-#         return {"files": files}
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=str(e))
-
-
 @router.get("/download", response_class=FileResponse)
 def download_file(
     background_tasks: BackgroundTasks,

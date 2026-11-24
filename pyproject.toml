@@ -48,7 +48,7 @@ indent-width = 4
 target-version = "py314"
 
 [tool.ruff.lint]
-ignore = []
+ignore = ["BLE001"]
 
 fixable = ["ALL"]
 unfixable = []
