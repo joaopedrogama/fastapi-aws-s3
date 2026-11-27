@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     s3_secret_key: str
     s3_endpoint_url: str
     bucket_name: str
+    database_url: str
 
     model_config = SettingsConfigDict(env_file="/app/.env")
 

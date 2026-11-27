@@ -5,7 +5,7 @@ import boto3
 from botocore.client import Config
 
 from app.config.settings import settings
-from app.exceptions.s3 import S3ObjectDoesntExistException
+from app.exceptions.bucket import S3ObjectDoesntExistException
 
 
 class S3Service:

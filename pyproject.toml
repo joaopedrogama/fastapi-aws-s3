@@ -8,8 +8,10 @@ dependencies = [
     "boto3>=1.44.5",
     "fastapi[standard]>=0.163.2",
     "pre-commit>=4.7.0",
+    "psycopg[binary]>=3.3.9",
     "pydantic-settings>=2.16.3",
     "ruff>=0.17.6",
+    "sqlmodel>=0.0.50",
 ]
 
 [tool.ruff]
@@ -48,6 +50,26 @@ indent-width = 4
 target-version = "py314"
 
 [tool.ruff.lint]
+extend-select = [
+    "F",        # Pyflakes rules
+    "W",        # PyCodeStyle warnings
+    "E",        # PyCodeStyle errors
+    "I",        # Sort imports properly
+    "UP",       # Warn if certain things can changed due to newer Python versions
+    "C4",       # Catch incorrect use of comprehensions, dict, list, etc
+    "FA",       # Enforce from __future__ import annotations
+    "ISC",      # Good use of string concatenation
+    "ICN",      # Use common import conventions
+    "RET",      # Good return practices
+    "SIM",      # Common simplification rules
+    "TID",      # Some good import practices
+    "TC",       # Enforce importing certain types in a TYPE_CHECKING block
+    "PTH",      # Use pathlib instead of os.path
+    "TD",       # Be diligent with TODO comments
+    "NPY",      # Some numpy-specific things
+    "FURB",     # Suggest more idiomatic Python patterns
+]
+
 ignore = ["BLE001"]
 
 fixable = ["ALL"]

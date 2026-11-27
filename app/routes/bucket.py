@@ -4,10 +4,9 @@ from fastapi import APIRouter, File, HTTPException, Query, UploadFile
 from fastapi.responses import FileResponse
 from starlette.background import BackgroundTasks
 
-from app.services.s3_service import S3Service
+from app.services.bucket import S3Service
 
 router = APIRouter()
-
 
 @router.post("/upload/")
 async def upload_file(file: UploadFile):
